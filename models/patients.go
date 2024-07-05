@@ -9,4 +9,5 @@ type Patient struct {
 	ContactInformation ContactInformation `json:"contactInformation" bson:"contactInformation"`
 	MedicalHistory []MedicalHistory `json:"medicalHistory" bson:"medicalHistory"`
 	Appointments []string `json:"appointments" bson:"appointments"`
+	Image string `json:"image" bson:"image"`
 }

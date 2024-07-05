@@ -7,6 +7,7 @@ type Doctor struct {
 	Specialty string `json:"specialty" bson:"specialty"`
 	ContactInformation ContactInformation `json:"contactInformation" bson:"contactInformation"`
 	Availability []Availability `json:"availability" bson:"availability"`
+	Image string `json:"image" bson:"image"`
 }
 
 type Availability struct {

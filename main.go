@@ -1,7 +1,7 @@
 package main
 
 import (
-	"event-booking/routes"
+	"vital-link/routes"
 	"os"
 	"github.com/gofiber/fiber/v2"
 )

@@ -1,7 +1,7 @@
 package routes 
 
 import (
-	"event-booking/controllers"
+	"vital-link/controllers"
 	"github.com/gofiber/fiber/v2"
 )
 
