@@ -1,13 +1,15 @@
 package controllers
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+)
 
 func CreateAppointment(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{"message": "Create Appointment"})
+	return c.JSON(fiber.Map{"message": "Appointment created successfully"})
 }
 
 func GetAppointment(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{"message": "Get Appointment"})
+	return c.JSON(fiber.Map{"message": "Appointment retrieved successfully"})
 }
 
 func GetAppointments(c *fiber.Ctx) error {

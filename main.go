@@ -1,7 +1,7 @@
 package main
 
 import (
-	"vital-link/routes"
+	"vital-link/api/routes"
 	"os"
 	"github.com/gofiber/fiber/v2"
 )

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"vital-link/utils"
+	"vital-link/api/utils"
 )
 
 func Login(c *fiber.Ctx) error {

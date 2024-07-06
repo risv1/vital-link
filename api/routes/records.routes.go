@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"vital-link/controllers"
+	"vital-link/api/controllers"
 	"github.com/gofiber/fiber/v2"
 )
 
