@@ -1,7 +1,7 @@
 package models 
 
 type User struct {
-	GoogleID string `json:"googleId" bson:"googleId"`
+	ID string `json:"id" bson:"_id"`
 	Name string `json:"name" bson:"name"`
 	Email string `json:"email" bson:"email"`
 	Role string `json:"role" bson:"role"`
