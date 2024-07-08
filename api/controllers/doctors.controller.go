@@ -11,15 +11,12 @@ import (
 func GetDoctor(c *fiber.Ctx) error {
 	id := c.Params("id")
 	
-	db, err := database.Connect()
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"message": "Connection failed", "error": err})
-	}
+	db := database.GetDatabase()
 
 	collection := db.Collection("doctors")
 	doctor := models.Doctor{}
 
-	err = collection.FindOne(c.Context(), bson.M{"_id": id}).Decode(&doctor)
+	err := collection.FindOne(c.Context(), bson.M{"_id": id}).Decode(&doctor)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"message": "Doctor retrieval failed", "error": err})
 	}
@@ -28,10 +25,7 @@ func GetDoctor(c *fiber.Ctx) error {
 }
 
 func GetDoctors(c *fiber.Ctx) error {
-	db, err := database.Connect()
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"message": "Connection failed", "error": err})
-	}
+	db := database.GetDatabase()
 
 	collection := db.Collection("doctors")
 	doctors := []models.Doctor{}
@@ -75,13 +69,10 @@ func CreateDoctor(c *fiber.Ctx) error {
 		Image:            body["image"],
 	}
 
-	db, err := database.Connect()
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"message": "Connection failed", "error": err})
-	}
+	db := database.GetDatabase()
 
 	collection := db.Collection("doctors")
-	_, err = collection.InsertOne(c.Context(), doctor)
+	_, err := collection.InsertOne(c.Context(), doctor)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"message": "Doctor creation failed", "error": err})
 	}
@@ -97,10 +88,7 @@ func UpdateDoctor(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"message": "Doctor update failed", "error": err})
 	}
 
-	db, err := database.Connect()
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"message": "Connection failed", "error": err})
-	}
+	db := database.GetDatabase()
 
 	updatedDoctor := models.Doctor{
 		FirstName:         body["firstName"],
@@ -123,7 +111,7 @@ func UpdateDoctor(c *fiber.Ctx) error {
 	collection := db.Collection("doctors")
 	doctor := models.Doctor{}
 
-	err = collection.FindOneAndUpdate(c.Context(), bson.M{"_id": id}, bson.M{"$set": updatedDoctor}).Decode(&doctor)
+	err := collection.FindOneAndUpdate(c.Context(), bson.M{"_id": id}, bson.M{"$set": updatedDoctor}).Decode(&doctor)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"message": "Doctor update failed", "error": err})
 	}
@@ -133,14 +121,10 @@ func UpdateDoctor(c *fiber.Ctx) error {
 
 func DeleteDoctor(c *fiber.Ctx) error {
 	id := c.Params("id")
-
-	db, err := database.Connect()
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"message": "Connection failed", "error": err})
-	}
+	db := database.GetDatabase()
 
 	collection := db.Collection("doctors")
-	_, err = collection.DeleteOne(c.Context(), bson.M{"_id": id})
+	_, err := collection.DeleteOne(c.Context(), bson.M{"_id": id})
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"message": "Doctor deletion failed", "error": err})
 	}

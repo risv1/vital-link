@@ -1,13 +1,17 @@
 package main
 
 import (
-	"vital-link/api/routes"
 	"os"
+	"vital-link/api/database"
+	"vital-link/api/routes"
+
 	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
 	app := fiber.New()
+
+	database.Connect() 
 
 	port := os.Getenv("PORT")
 	

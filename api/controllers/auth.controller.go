@@ -9,7 +9,6 @@ import (
 	"vital-link/api/database"
 	"vital-link/api/models"
 	"vital-link/api/utils"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
@@ -79,14 +78,32 @@ func Callback(c *fiber.Ctx) error {
 		ProfileId: uuid.New().String(),
 	}
 
-	db, err := database.Connect()
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{
-			"message": "Database connection failed",
+	db := database.GetDatabase()
+
+	collection := db.Collection("users")
+	findUser := models.User{}
+	err = collection.FindOne(c.Context(), models.User{Email: newUser.Email}).Decode(&findUser)
+	if err == nil {
+		jwtToken, err := utils.GenerateJWT(findUser.ID)
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{
+				"message": "Failed to generate JWT",
+			})
+		}
+
+		c.Cookie(&fiber.Cookie{
+			Name: "token",
+			Value: jwtToken,
+			Expires: time.Now().Add(time.Hour * 24),
+			HTTPOnly: true,
+			SameSite: "None",
+		})
+
+		return c.Status(200).JSON(fiber.Map{
+			"message": "Login successful",
 		})
 	}
 
-	collection := db.Collection("users")
 	_, err = collection.InsertOne(c.Context(), newUser)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
