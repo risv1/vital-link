@@ -3,12 +3,20 @@ package controllers
 import (
 	"vital-link/api/database"
 	"vital-link/api/models"
+	"vital-link/api/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 func CreateAppointment(c *fiber.Ctx) error {
+
+	token := c.Cookies("token")
+	id, err := utils.VerifyJWT(token)
+	if err != nil {
+		return c.Status(401).JSON(fiber.Map{"message": "Unauthorized"})
+	}
+
 	var body map[string]string
 	if err := c.BodyParser(&body); err != nil {
 		return c.Status(400).JSON(fiber.Map{"message": "Appointment creation failed", "error": err})
@@ -17,7 +25,7 @@ func CreateAppointment(c *fiber.Ctx) error {
 	appointment := models.Appointments{
 		ID: uuid.New().String(),
 		DoctorId: body["doctorId"],
-		PatientId: body["patientId"],
+		PatientId: id["id"].(string),
 		Reason: body["reason"],
 		Date: body["date"],
 		Time: body["time"],
@@ -28,7 +36,7 @@ func CreateAppointment(c *fiber.Ctx) error {
 	db := database.GetDatabase()
 
 	collection := db.Collection("appointments")
-	_, err := collection.InsertOne(c.Context(), appointment)
+	_, err = collection.InsertOne(c.Context(), appointment)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"message": "Appointment creation failed", "error": err})
 	}

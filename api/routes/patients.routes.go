@@ -7,11 +7,11 @@ import (
 )
 
 func PatientRoutes(app *fiber.App) {
-	adminGroup := app.Group("/api/appointments").Use(middlewares.CheckAdmin)
-	authGroup := app.Group("/api/appointments").Use(middlewares.CheckAuthenticated)
-	authGroup.Post("/api/patients", controllers.CreatePatient)
-	adminGroup.Get("/api/patients", controllers.GetPatients)
-	adminGroup.Get("/api/patients/:id", controllers.GetPatient)
-	adminGroup.Put("/api/patients/:id", controllers.UpdatePatient)
-	adminGroup.Delete("/api/patients/:id", controllers.DeletePatient)
+	adminGroup := app.Group("/api/patients").Use(middlewares.CheckAdmin)
+	authGroup := app.Group("/api/patients").Use(middlewares.CheckAuthenticated)
+	authGroup.Post("/", controllers.CreatePatient)
+	adminGroup.Get("/", controllers.GetPatients)
+	adminGroup.Get("/:id", controllers.GetPatient)
+	adminGroup.Put("/:id", controllers.UpdatePatient)
+	adminGroup.Delete("/:id", controllers.DeletePatient)
 }

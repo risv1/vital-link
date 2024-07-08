@@ -7,10 +7,10 @@ import (
 )
 
 func DoctorRoutes(app *fiber.App) {
-	adminGroup := app.Group("/api/appointments").Use(middlewares.CheckAdmin)
-	app.Get("/api/doctors", controllers.GetDoctors)
-	app.Get("/api/doctors/:id", controllers.GetDoctor)
-	adminGroup.Post("/api/doctors", controllers.CreateDoctor)
-	adminGroup.Put("/api/doctors/:id", controllers.UpdateDoctor)
-	adminGroup.Delete("/api/doctors/:id", controllers.DeleteDoctor)
+	adminGroup := app.Group("/api/doctors").Use(middlewares.CheckAdmin)
+	app.Get("/", controllers.GetDoctors)
+	app.Get("/:id", controllers.GetDoctor)
+	adminGroup.Post("/", controllers.CreateDoctor)
+	adminGroup.Put("/:id", controllers.UpdateDoctor)
+	adminGroup.Delete("/:id", controllers.DeleteDoctor)
 }

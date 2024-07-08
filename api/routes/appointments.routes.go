@@ -9,11 +9,11 @@ import (
 func AppointmentRoutes(app *fiber.App) {
 	adminGroup := app.Group("/api/appointments").Use(middlewares.CheckAdmin)
 	authGroup := app.Group("/api/appointments").Use(middlewares.CheckAuthenticated)
-	authGroup.Post("/api/appointments", controllers.CreateAppointment)
-	adminGroup.Get("/api/appointments", controllers.GetAppointments)
-	adminGroup.Get("/api/appointments/:id", controllers.GetAppointment)
-	adminGroup.Get("/api/appointments/doctor/:doctorId", controllers.GetAppointmentsByDoctor)
-	adminGroup.Get("/api/appointments/patient/:patientId", controllers.GetAppointmentsByPatient)
-	adminGroup.Put("/api/appointments/:id", controllers.UpdateAppointment)
-	adminGroup.Delete("/api/appointments/:id", controllers.DeleteAppointment)
+	authGroup.Post("/", controllers.CreateAppointment)
+	adminGroup.Get("/", controllers.GetAppointments)
+	adminGroup.Get("/:id", controllers.GetAppointment)
+	adminGroup.Get("/doctor/:doctorId", controllers.GetAppointmentsByDoctor)
+	adminGroup.Get("/patient/:patientId", controllers.GetAppointmentsByPatient)
+	adminGroup.Put("/:id", controllers.UpdateAppointment)
+	adminGroup.Delete("/:id", controllers.DeleteAppointment)
 }

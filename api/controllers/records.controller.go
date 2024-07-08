@@ -1,11 +1,13 @@
 package controllers
 
 import (
+	"vital-link/api/database"
+	"vital-link/api/models"
+	"vital-link/api/utils"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
-	"vital-link/api/database"
-	"vital-link/api/models"
 )
 
 func GetRecord(c *fiber.Ctx) error {
@@ -21,6 +23,30 @@ func GetRecord(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{"message": "Record retrieved successfully", "data": record})
+}
+
+func GetUserRecords(c *fiber.Ctx) error {
+	token := c.Cookies("token")
+	id, err := utils.VerifyJWT(token)
+	if err != nil {
+		return c.Status(401).JSON(fiber.Map{"message": "Unauthorized"})
+	}
+
+	db := database.GetDatabase()
+
+	collection := db.Collection("records")
+	records := []models.Records{}
+
+	cursor, err := collection.Find(c.Context(), bson.M{"patientId": id["id"].(string)})
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"message": "Records retrieval failed", "error": err})
+	}
+
+	if err := cursor.All(c.Context(), &records); err != nil {
+		return c.Status(500).JSON(fiber.Map{"message": "Records retrieval failed", "error": err})
+	}
+
+	return c.JSON(fiber.Map{"message": "Records retrieved successfully", "data": records})
 }
 
 func GetRecords(c *fiber.Ctx) error {
