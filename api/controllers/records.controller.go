@@ -4,7 +4,6 @@ import (
 	"vital-link/api/database"
 	"vital-link/api/models"
 	"vital-link/api/utils"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
@@ -183,8 +182,10 @@ func AddDocument(c *fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"message": "Document creation failed", "error": err})
 	}
 
-	// yet to implement a object storage such as s3 or cloudflare-r2
-	filePath := "/" + file.Filename 
+	filePath, err := utils.UploadFile(file, documentType)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"message": "Document creation failed", "error": err})
+	}
 
 	addDoc := models.Records{
 		Documents: []models.Documents{
