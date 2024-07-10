@@ -15,7 +15,7 @@ type UserCache struct {
 var users = UserCache{cache: make(map[string]fiber.Map)}
 
 func CheckAdmin(c *fiber.Ctx) error {
-	token := c.Cookies("jwt")
+	token := c.Cookies("token")
 	if token == "" {
 		return c.Status(401).JSON(fiber.Map{
 			"message": "Unauthorized",
